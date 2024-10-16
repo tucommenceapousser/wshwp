@@ -57,29 +57,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         body {
             background-color: #0d0d0d;
             color: #00ff00;
-            font-family: monospace;
+            font-family: 'Courier New', Courier, monospace;
             text-align: center;
             padding: 20px;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
         h2 {
             color: #00cc00;
+            text-shadow: 0 0 5px #00ff00;
         }
         input[type="submit"] {
             background-color: #00ff00;
             color: #000;
-            padding: 10px 20px;
-            border: none;
+            padding: 15px 30px;
+            border: 2px solid #00cc00;
             cursor: pointer;
             margin: 10px;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
         }
         input[type="submit"]:hover {
             background-color: #00cc00;
+            transform: scale(1.05);
         }
         .error {
             color: red;
+            font-weight: bold;
+            margin-top: 20px;
         }
         .success {
             color: #00ff00;
+            font-weight: bold;
+            margin-top: 20px;
         }
     </style>
 </head>
